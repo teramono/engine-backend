@@ -9,16 +9,16 @@ import (
 
 func main() {
 	// ...
-	setup, err := setup.NewSetup()
+	setup, err := setup.NewSetup(true)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	// ...
-	engine, err := engine.NewBackendEngine(setup)
+	server, err := engine.NewBackendServer(setup)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	engine.Listen()
+	server.Listen()
 }
