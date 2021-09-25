@@ -1,25 +1,39 @@
 package engine
 
+import "github.com/teramono/utilities/pkg/setup"
+
 // Backend ...
 type Backend struct {
 	server BackendServerConn
 }
 
 // BackendServerConn ...
-type BackendServerConn struct{}
-
-// Request ...
-type Request struct{}
-
-// NewBackend ...
-func NewBackend() Backend {
-	return Backend{}
+type BackendServerConn struct {
+	address string
+	port    string
 }
 
-// RunScriptURL ...
-func (backend *Backend) RunScriptURL(url string, req Request) {}
+// Request ...
+type Request struct {
+	URL string
+}
+
+// NewBackend ...
+func NewBackend(setup *setup.Setup) Backend {
+	return Backend{}
+}
 
 // NewRequest ...
 func NewRequest() Request {
 	return Request{}
+}
+
+// Login ...
+func (backend *Backend) Login(workspaceID string) {
+	// Send to route.
+}
+
+// Run ...
+func (backend *Backend) Run(workspaceID string, req Request) {
+	// Send to route.
 }

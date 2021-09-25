@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// ...
-	setup, err := setup.NewSetup(true)
+	setup, err := setup.NewSetup()
 	if err != nil {
 		log.Fatalln(err)
 	}

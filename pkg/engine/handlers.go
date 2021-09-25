@@ -7,8 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RunScriptURL ...
-func (server *BackendServer) RunScriptURL(c *gin.Context) {
+// Login ...
+func (server *BackendServer) Login(c *gin.Context) {
+}
+
+// Run ...
+func (server *BackendServer) Run(c *gin.Context) {
 	// TODO: Will eventually use grpc.
 	var body map[string]interface{}
 	if err := c.BindJSON(&body); err != nil {
