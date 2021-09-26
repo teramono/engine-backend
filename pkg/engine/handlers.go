@@ -1,25 +1,21 @@
 package engine
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Login ...
-func (server *BackendServer) Login(c *gin.Context) {
+func (server *BackendServer) Login(ctx *gin.Context) {
 }
 
 // Run ...
-func (server *BackendServer) Run(c *gin.Context) {
+func (server *BackendServer) Run(ctx *gin.Context) {
 	// TODO: Will eventually use grpc.
 	var body map[string]interface{}
-	if err := c.BindJSON(&body); err != nil {
-		fmt.Println(err)
-	}
 
-	// TODO: Contruct request.
+	ctx.BindJSON(&body) // Error is not useful here since body is sometimes allowed not to exist
 
-	c.JSON(http.StatusBadRequest, body)
+	ctx.JSON(http.StatusOK, body)
 }
