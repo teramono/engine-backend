@@ -1,59 +1,32 @@
 package engine
 
 import (
-	"bytes"
 	"net/http"
-	"strings"
-	"time"
 
 	"github.com/teramono/utilities/pkg/request"
 	"github.com/teramono/utilities/pkg/setup"
 )
 
+const Host = "http://localhost:5051" // TODO: SEC: Use Https, gRPC, setup config
+
 // BackendInterface ...
 type BackendInterface struct {
-	server BackendServerConn
-}
-
-// BackendServerConn ...
-type BackendServerConn struct {
-	address string
-	port    string
+	setup *setup.Setup
 }
 
 // NewBackendInterface ...
 func NewBackendInterface(setup *setup.Setup) BackendInterface {
-	return BackendInterface{}
+	return BackendInterface{setup}
 }
 
 // Login ...
-func (backend *BackendInterface) Login(workspaceID string, req request.Request) (*http.Response, error) {
-	return postRequest(&req)
+func (backend *BackendInterface) Login(req request.Request) (*http.Response, error) {
+	req.URL.Host = Host
+	return req.Send()
 }
 
 // Run ...
-func (backend *BackendInterface) Run(workspaceID string, req request.Request) (*http.Response, error) {
-	return postRequest(&req)
-}
-
-func postRequest(req *request.Request) (*http.Response, error) {
-	targetHost := "http://localhost:5051" // SEC: TODO: Use https. Swap gRPC in. Also should be gotten from setup
-
-	// Http client with 10s timeout.
-	client := &http.Client{
-		Timeout: time.Second * 10,
-	}
-
-	// Construct a new request.
-	newReq, err := http.NewRequest(req.Method, targetHost+req.URL.URI, bytes.NewReader(req.Body))
-	if err != nil {
-		return nil, err
-	}
-
-	// Set headers.
-	for key, value := range req.Headers {
-		newReq.Header.Set(key, strings.Join(value, ","))
-	}
-
-	return client.Do(newReq)
+func (backend *BackendInterface) Run(req request.Request) (*http.Response, error) {
+	req.URL.Host = Host
+	return req.Send()
 }
