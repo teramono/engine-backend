@@ -4,26 +4,27 @@ import (
 	"log"
 
 	"github.com/teramono/engine-backend/pkg/server"
-	"github.com/teramono/utilities/pkg/broker"
 	"github.com/teramono/utilities/pkg/setup"
 )
 
-// TODO:
-const Port = 5051
-const RootPath = "../tmp/"
-
 func main() {
-	// ...
+	// Establish common setup.
 	setup, err := setup.NewCommonSetup()
 	if err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 	}
 
-	// ...
-	server, err := server.NewBackendServer(setup, RootPath, Port, []broker.Address{})
+	// Create server.
+	server, err := server.NewBackendServer(setup)
 	if err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 	}
 
-	server.Listen()
+	defer server.BrokerClient.Close()
+
+	// Activate subscriptions.
+	err = server.ActivateSubscriptions()
+	if err != nil {
+		log.Panic(err)
+	}
 }
