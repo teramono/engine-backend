@@ -5,21 +5,19 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/teramono/engine-backend/pkg/crud"
+	"github.com/teramono/tera/pkg/runtime"
 	"github.com/teramono/utilities/pkg/configs"
 )
-
 
 // CanonicalWorkspacePath is the workspace canonical URL on the machine.
 //
 // Making it a type to prevent mistake.
 type CanonicalWorkspacePath string
 
-
 const (
-	authScriptPath = "/system/auth.js"
+	authScriptPath       = "/system/auth.js"
 	surlManifestFilename = "surl.yaml"
-	IndexScriptFilename = "index.js"
+	IndexScriptFilename  = "index.js"
 )
 
 func (server *BackendServer) getSurlPath(pathFromURLSuffix string, filename string) string {
@@ -68,8 +66,8 @@ func (server *BackendServer) fetchSurlManifest(canonicalWorkspacePath CanonicalW
 	return configs.NewSurlManifest(manifestBytes, configs.YAML)
 }
 
-func (server *BackendServer) fetchMiddlewareScripts(canonicalWorkspacePath CanonicalWorkspacePath, surlManifest *configs.SurlManifest) ([]crud.Script, error) {
-	scripts := []crud.Script{}
+func (server *BackendServer) fetchMiddlewareScripts(canonicalWorkspacePath CanonicalWorkspacePath, surlManifest *configs.SurlManifest) ([]runtime.Script, error) {
+	scripts := []runtime.Script{}
 
 	for _, path := range surlManifest.MiddlewareScripts {
 		scriptBytes, err := server.readRelativeFile(canonicalWorkspacePath, path)
@@ -77,7 +75,7 @@ func (server *BackendServer) fetchMiddlewareScripts(canonicalWorkspacePath Canon
 			return scripts, err
 		}
 
-		scripts = append(scripts, crud.Script{
+		scripts = append(scripts, runtime.Script{
 			Filename: path,
 			Content:  scriptBytes,
 		})

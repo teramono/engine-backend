@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 
-	"github.com/teramono/engine-backend/pkg/crud"
+	"github.com/teramono/tera/pkg/runtime"
 	"github.com/teramono/utilities/pkg/configs"
 	"github.com/teramono/utilities/pkg/messages"
 )
@@ -15,8 +15,14 @@ func (server *BackendServer) runSurlIndexScript(canonicalWorkspacePath Canonical
 		return []byte{}, err
 	}
 
+	// Create temp runtime.
+	rt, err := runtime.NewRuntime()
+	if err != nil {
+		return []byte{}, err
+	}
+
 	// Run script.
-	result, err := crud.RunScript(crud.Script{
+	result, err := rt.RunScript(runtime.Script{
 		Filename: indexScriptPath,
 		Content:  fileBytes,
 	})
@@ -39,8 +45,14 @@ func (server *BackendServer) runAuthScript(canonicalWorkspacePath CanonicalWorks
 		return false, err
 	}
 
+	// Create temp runtime.
+	rt, err := runtime.NewRuntime()
+	if err != nil {
+		return false, err
+	}
+
 	// Run script.
-	result, err := crud.RunScript(crud.Script{
+	result, err := rt.RunScript(runtime.Script{
 		Filename: authScriptPath,
 		Content:  fileBytes,
 	})
@@ -63,8 +75,14 @@ func (server *BackendServer) runMiddlewareScripts(canonicalWorkspacePath Canonic
 	}
 
 	for _, script := range scripts {
+		// Create temp runtime each time.
+		rt, err := runtime.NewRuntime()
+		if err != nil {
+			return false, err
+		}
+
 		// Run script.
-		result, err := crud.RunScript(script)
+		result, err := rt.RunScript(script)
 		if err != nil {
 			return false, err
 		}

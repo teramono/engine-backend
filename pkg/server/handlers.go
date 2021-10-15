@@ -38,7 +38,7 @@ func (server *BackendServer) Run(msg *nats.Msg) {
 	}
 
 	// Get path suffix from url.
-	pathFromURLSuffix := strings.TrimPrefix(msgData.URL.Path, "/run/")
+	pathFromURLSuffix := strings.TrimPrefix(msgData.URL.Path, "/r/")
 
 	fmt.Println(">>> pathFromURLSuffix", pathFromURLSuffix)
 
